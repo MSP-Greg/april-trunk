@@ -92,9 +92,6 @@ function Create-Folders {
   if (!(Test-Path -Path $d_repo/git -PathType Container )) {
         New-Item  -Path $d_repo/git -ItemType Junction -Value $d_git 1> $null
   }
-
-  New-Item -Path $d_build   -ItemType Directory 1> $null
-  New-Item -Path $d_install -ItemType Directory 1> $null
 }
 
 #——————————————————————————————————————————————————————————————————————————— Run
