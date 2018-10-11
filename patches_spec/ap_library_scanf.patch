@@ -1,0 +1,32 @@
+Patch by MSP-Greg
+Azure pipelines line endings may differ from Appveyor or local
+diff --git a/spec/ruby/library/scanf/io/scanf_spec.rb b/spec/ruby/library/scanf/io/scanf_spec.rb
+index 94e999335e..a76b2e6c40 100644
+--- a/spec/ruby/library/scanf/io/scanf_spec.rb
++++ b/spec/ruby/library/scanf/io/scanf_spec.rb
+@@ -4,8 +4,9 @@
+ 
+ describe "IO#scanf" do
+   before :each do
+-    @hw = File.open(File.dirname(__FILE__) + '/fixtures/helloworld.txt', 'r')
+-    @data = File.open(File.dirname(__FILE__) + '/fixtures/date.txt', 'r')
++    mode = windows? ? 'rb' : 'r' 
++    @hw = File.open(File.dirname(__FILE__) + '/fixtures/helloworld.txt', mode)
++    @data = File.open(File.dirname(__FILE__) + '/fixtures/date.txt', mode)
+   end
+ 
+   after :each do
+diff --git a/spec/ruby/library/scanf/io/shared/block_scanf.rb b/spec/ruby/library/scanf/io/shared/block_scanf.rb
+index 8c5bffb93b..791606e675 100644
+--- a/spec/ruby/library/scanf/io/shared/block_scanf.rb
++++ b/spec/ruby/library/scanf/io/shared/block_scanf.rb
+@@ -2,7 +2,8 @@
+ 
+ describe :scanf_io_block_scanf, shared: true do
+   before :each do
+-    @data= File.open(File.dirname(__FILE__) + '/../fixtures/date.txt', 'r')
++    mode = windows? ? 'rb' : 'r' 
++    @data = File.open(File.dirname(__FILE__) + '/../fixtures/date.txt', mode)
+   end
+ 
+   after :each do

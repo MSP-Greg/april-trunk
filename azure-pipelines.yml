@@ -1,0 +1,35 @@
+jobs:
+  - job: Ruby_mingw
+    timeoutInMinutes: 60
+    pool:
+      vmImage: vs2015-win2012r2
+    strategy:
+      maxParallel: 5
+      matrix:
+        x64-mingw32:
+          platform: x64
+    steps:
+      - checkout: self
+        fetchDepth: 10
+
+      - powershell: ./azure_pipeline_prereqs.ps1
+        displayName: $(System.JobName) install 7z, msys2, ruby trunk
+
+      - powershell: |
+          git clone -q --depth=5 --no-tags --branch=trunk  https://github.com/ruby/ruby.git                  ./ruby
+        displayName: $(System.JobName) add ruby repo
+
+      - powershell: $env:path = "$env:BUILD_SOURCESDIRECTORY\install\bin;$env:path" ; ./1_0_build_install_64.ps1
+        failOnStderr: false
+        displayName: $(System.JobName) add patches, etc
+
+      - powershell: |
+          $env:path = "$env:BUILD_SOURCESDIRECTORY\install\bin;$env:path"
+          ruby.exe azure_install_info.rb
+        continueOnError: true
+        displayName: $(System.JobName) install info
+        
+      - powershell: $env:path = ./2_0_test.ps1
+        failOnStderr: false
+        continueOnError: true
+        displayName: $(System.JobName) test

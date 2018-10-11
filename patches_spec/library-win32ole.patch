@@ -1,0 +1,245 @@
+diff --git a/spec/ruby/library/win32ole/fixtures/classes.rb b/spec/ruby/library/win32ole/fixtures/classes.rb
+index 830b1be0b5..be568e813c 100644
+--- a/spec/ruby/library/win32ole/fixtures/classes.rb
++++ b/spec/ruby/library/win32ole/fixtures/classes.rb
+@@ -1,11 +1,14 @@
+ module WIN32OLESpecs
+-  def self.new_ole(name)
+-    retried = false
++  def self.new_ole(name, retries = 1)
++    retried = 0
+     begin
+       WIN32OLE.new(name)
+     rescue WIN32OLERuntimeError => e
+-      unless retried
+-        retried = true
++      if retried < retries
++        retried += 1
++        # ? on below, $stderr or STDERR, okay on multi?
++        # $stderr.puts "#{name} win32ole_ole_method\n  retry (#{tries}): #{e.class}: #{e.message}"
++        sleep 0.1
+         retry
+       end
+       raise e
+diff --git a/spec/ruby/library/win32ole/win32ole/_getproperty_spec.rb b/spec/ruby/library/win32ole/win32ole/_getproperty_spec.rb
+index 201fac9940..ca5812e9aa 100644
+--- a/spec/ruby/library/win32ole/win32ole/_getproperty_spec.rb
++++ b/spec/ruby/library/win32ole/win32ole/_getproperty_spec.rb
+@@ -4,12 +4,13 @@
+   require 'win32ole'
+ 
+   describe "WIN32OLE#_getproperty" do
+-    before :each do
+-      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++    before :all do
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+ 
+-    after :each do
++    after :all do
+       @ie.Quit
++      @ie = nil
+     end
+ 
+     it "gets name" do
+diff --git a/spec/ruby/library/win32ole/win32ole/invoke_spec.rb b/spec/ruby/library/win32ole/win32ole/invoke_spec.rb
+index 60c5cd59b6..da6b84c1a2 100644
+--- a/spec/ruby/library/win32ole/win32ole/invoke_spec.rb
++++ b/spec/ruby/library/win32ole/win32ole/invoke_spec.rb
+@@ -4,12 +4,13 @@
+   require 'win32ole'
+ 
+   describe "WIN32OLE#invoke" do
+-    before :each do
+-      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++    before :all do
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+ 
+-    after :each do
++    after :all do
+       @ie.Quit
++      @ie = nil
+     end
+ 
+     it "get name by invoking 'Name' OLE method" do
+diff --git a/spec/ruby/library/win32ole/win32ole/ole_func_methods_spec.rb b/spec/ruby/library/win32ole/win32ole/ole_func_methods_spec.rb
+index 8a510519f2..8f60731533 100644
+--- a/spec/ruby/library/win32ole/win32ole/ole_func_methods_spec.rb
++++ b/spec/ruby/library/win32ole/win32ole/ole_func_methods_spec.rb
+@@ -4,12 +4,13 @@
+   require 'win32ole'
+ 
+   describe "WIN32OLE#ole_func_methods" do
+-    before :each do
+-      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++    before :all do
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+ 
+-    after :each do
+-      @ie.Quit if @ie
++    after :all do
++      @ie.Quit
++      @ie = nil
+     end
+ 
+     it "raises ArgumentError if argument is given" do
+diff --git a/spec/ruby/library/win32ole/win32ole/ole_methods_spec.rb b/spec/ruby/library/win32ole/win32ole/ole_methods_spec.rb
+index 4f406a2ce8..a22f183a66 100644
+--- a/spec/ruby/library/win32ole/win32ole/ole_methods_spec.rb
++++ b/spec/ruby/library/win32ole/win32ole/ole_methods_spec.rb
+@@ -4,12 +4,13 @@
+   require 'win32ole'
+ 
+   describe "WIN32OLE#ole_methods" do
+-    before :each do
+-      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++    before :all do
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+ 
+-    after :each do
++    after :all do
+       @ie.Quit
++      @ie = nil
+     end
+ 
+     it "raises ArgumentError if argument is given" do
+diff --git a/spec/ruby/library/win32ole/win32ole/ole_obj_help_spec.rb b/spec/ruby/library/win32ole/win32ole/ole_obj_help_spec.rb
+index cd2be503f0..e11ddde38a 100644
+--- a/spec/ruby/library/win32ole/win32ole/ole_obj_help_spec.rb
++++ b/spec/ruby/library/win32ole/win32ole/ole_obj_help_spec.rb
+@@ -4,12 +4,13 @@
+   require 'win32ole'
+ 
+   describe "WIN32OLE#ole_obj_help" do
+-    before :each do
+-      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++    before :all do
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+ 
+-    after :each do
++    after :all do
+       @ie.Quit
++      @ie = nil
+     end
+ 
+     it "raises ArgumentError if argument is given" do
+diff --git a/spec/ruby/library/win32ole/win32ole/ole_put_methods_spec.rb b/spec/ruby/library/win32ole/win32ole/ole_put_methods_spec.rb
+index a58bbc8afe..39a6babfb4 100644
+--- a/spec/ruby/library/win32ole/win32ole/ole_put_methods_spec.rb
++++ b/spec/ruby/library/win32ole/win32ole/ole_put_methods_spec.rb
+@@ -4,11 +4,11 @@
+   require 'win32ole'
+ 
+   describe "WIN32OLE#ole_put_methods" do
+-    before :each do
+-      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++    before :all do
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+-
+-    after :each do
++   
++    after :all do
+       @ie.Quit
+     end
+ 
+diff --git a/spec/ruby/library/win32ole/win32ole/shared/ole_method.rb b/spec/ruby/library/win32ole/win32ole/shared/ole_method.rb
+index 9fdb5f2055..71ca364a61 100644
+--- a/spec/ruby/library/win32ole/win32ole/shared/ole_method.rb
++++ b/spec/ruby/library/win32ole/win32ole/shared/ole_method.rb
+@@ -5,24 +5,12 @@
+ 
+   describe :win32ole_ole_method, shared: true do
+     before :each do
+-      # This part is unstable, so retrying 3 times.
+-      tries = 0
+-      begin
+-        @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
+-      rescue WIN32OLERuntimeError => e
+-        # WIN32OLERuntimeError: failed to create WIN32OLE object from `InternetExplorer.Application'
+-        #     HRESULT error code:0x800704a6
+-        #       A system shutdown has already been scheduled.
+-        if tries < 3
+-          tries += 1
+-          $stderr.puts "win32ole_ole_method retry (#{tries}): #{e.class}: #{e.message}"
+-          retry
+-        end
+-      end
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+ 
+-    after :each do
+-      @ie.Quit
++    after :all do
++      @ie.Quit if @ie
++      @ie = nil
+     end
+ 
+     it "raises ArgumentError if no argument is given" do
+diff --git a/spec/ruby/library/win32ole/win32ole/shared/setproperty.rb b/spec/ruby/library/win32ole/win32ole/shared/setproperty.rb
+index f272da4b4e..313d9f1266 100644
+--- a/spec/ruby/library/win32ole/win32ole/shared/setproperty.rb
++++ b/spec/ruby/library/win32ole/win32ole/shared/setproperty.rb
+@@ -4,12 +4,13 @@
+   require 'win32ole'
+ 
+   describe :win32ole_setproperty, shared: true do
+-    before :each do
+-      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++    before :all do
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+ 
+-    after :each do
++    after :all do
+       @ie.Quit
++      @ie = nil
+     end
+ 
+     it "raises ArgumentError if no argument is given" do
+diff --git a/spec/ruby/library/win32ole/win32ole_event/new_spec.rb b/spec/ruby/library/win32ole/win32ole_event/new_spec.rb
+index bceaa737e1..e5aa808292 100644
+--- a/spec/ruby/library/win32ole/win32ole_event/new_spec.rb
++++ b/spec/ruby/library/win32ole/win32ole_event/new_spec.rb
+@@ -4,12 +4,13 @@
+   require 'win32ole'
+ 
+   describe "WIN32OLE_EVENT.new" do
+-    before :each do
+-      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++    before :all do
++      @ie = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+     end
+ 
+-    after :each do
++    after :all do
+       @ie.Quit if @ie
++      @ie = nil
+     end
+ 
+     it "raises TypeError given invalid argument" do
+diff --git a/spec/ruby/library/win32ole/win32ole_event/on_event_spec.rb b/spec/ruby/library/win32ole/win32ole_event/on_event_spec.rb
+index 00b8fcc035..312f1cbac5 100644
+--- a/spec/ruby/library/win32ole/win32ole_event/on_event_spec.rb
++++ b/spec/ruby/library/win32ole/win32ole_event/on_event_spec.rb
+@@ -18,7 +18,7 @@ def handler3(event, *args)
+ 
+   describe "WIN32OLE_EVENT#on_event with no argument" do
+     before :each do
+-      @ie     = WIN32OLESpecs.new_ole('InternetExplorer.Application')
++      @ie     = WIN32OLESpecs.new_ole('InternetExplorer.Application', 3)
+       @ev     = WIN32OLE_EVENT.new(@ie, 'DWebBrowserEvents')
+       @event  = ''
+       @event2 = ''
+@@ -28,6 +28,7 @@ def handler3(event, *args)
+ 
+     after :each do
+       @ie.Quit
++      @ie = nil
+     end
+ 
+     it "sets event handler properly, and the handler is invoked by event loop" do

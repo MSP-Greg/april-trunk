@@ -1,0 +1,15 @@
+Patch by MSP-Greg
+cp conflicts with Powershell
+diff --git a/Makefile.in b/Makefile.in
+index bdfe3ab6c9..ff61b77e50 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -180,7 +180,7 @@ ENCSTATIC     = @ENCSTATIC@
+ SET_LC_MESSAGES = env LC_MESSAGES=C
+ 
+ MAKEDIRS      = @MKDIR_P@
+-CP            = cp
++CP            = cp.exe
+ MV            = mv
+ RM            = rm -f
+ RMDIR         = @RMDIR@
