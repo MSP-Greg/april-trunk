@@ -133,7 +133,7 @@ function Set-Env {
 # defaults to 64 bit
 $script:bits = if ($args.length -eq 1 -and $args[0] -eq 32) { 32 } else { 64 }
 
-cd $d_repo
+cd $PSScriptRoot
 
 . ./0_common.ps1
 Set-Variables
