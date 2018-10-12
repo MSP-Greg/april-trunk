@@ -7,16 +7,21 @@ class << self
 
   def run
     puts "\nCreating 'InternetExplorer.Application'"
+    retries = 3
+    retried = 0
     begin
-      ie = WIN32OLE.new 'Shell.Application'
+      ie = WIN32OLE.new 'InternetExplorer.Application'
       puts "\nie created", ""
     rescue => e
-      puts e.class
+      puts "--------------- ERROR #{e.class}"
       puts e.message
+      if retried < retries
+        retried += 1
+        sleep 0.1
+        retry
     end
 
     if ie
-    
       begin
         ie.ole_func_methods(1)
       rescue => e
