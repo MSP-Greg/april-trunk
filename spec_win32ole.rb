@@ -19,6 +19,7 @@ class << self
         retried += 1
         sleep 0.1
         retry
+      end
     end
 
     if ie
