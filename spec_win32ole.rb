@@ -8,7 +8,7 @@ class << self
   def run
     puts "\nCreating 'InternetExplorer.Application'"
     begin
-      ie = WIN32OLE.new 'InternetExplorer.Application'
+      ie = WIN32OLE.new 'Shell.Application'
       puts "\nie created", ""
     rescue => e
       puts e.class
