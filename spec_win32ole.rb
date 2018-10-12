@@ -17,7 +17,7 @@ class << self
       puts e.message
       if retried < retries
         retried += 1
-        sleep 0.1
+        sleep 1.0
         retry
       end
     end
