@@ -1,10 +1,12 @@
 require 'win32ole'
 
+puts "require 'win32ole' succeeded"
+
 module SpecWin32Ole
 class << self
 
   def run
-    puts "Creating 'InternetExplorer.Application'"
+    puts "\nCreating 'InternetExplorer.Application'"
     begin
       ie = WIN32OLE.new 'InternetExplorer.Application'
       puts "\nie created", ""

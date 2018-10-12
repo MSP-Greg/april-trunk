@@ -232,7 +232,7 @@ sleep 2
 $env:path = "$d_install/bin;$d_repo/git/cmd;$base_path"
 cd $PSScriptRoot
 Write-Host "----------------------------------------- Running spec_win32ole.rb"
-ruby spec_win32ole.rb
+ruby $PSScriptRoot\spec_win32ole.rb
 
 ren "$d_install/lib/ruby/site_ruby/readline.rb_" "readline.rb"
 
