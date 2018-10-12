@@ -4,6 +4,7 @@ module SpecWin32Ole
 class << self
 
   def run
+    puts "Creating 'InternetExplorer.Application'"
     begin
       ie = WIN32OLE.new 'InternetExplorer.Application'
       puts "\nie created", ""
