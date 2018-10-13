@@ -39,7 +39,6 @@ class << self
       puts "ie.ole_func_methods.map { |m| m.name }.include?('AddRef')"
       puts "   should be true - #{t}"
       puts
-      ie.Quit
       ie = nil    
     end
   end
