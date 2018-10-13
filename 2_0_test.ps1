@@ -191,10 +191,11 @@ function MSpec {
   $env:path = "$d_install/bin;$d_repo/git/cmd;$base_path"
 
 #   -e_args "--disable=gems -rdevkit ../mspec/bin/mspec -j -V -T `"--disable=gems`"" `
+#   -e_args "--disable=gems -rdevkit ../mspec/bin/mspec -V -f s -T `"--disable=gems`"" `
   
   Run-Proc `
     -exe    $ruby_exe `
-    -e_args "--disable=gems -rdevkit ../mspec/bin/mspec -V -f s -T `"--disable=gems`" library/win32ole" `
+    -e_args "--disable=gems -rdevkit ../mspec/bin/mspec -j -V -T `"--disable=gems`"" `
     -StdOut "test_mspec.log" `
     -StdErr "test_mspec_err.log" `
     -Title  "test-mspec" `
@@ -225,15 +226,9 @@ $m_start = Get-Date
 sleep 2
 BootStrapTest
 sleep 2
-# Test-All
-# sleep 5
-# MSpec
-
-$env:path = "$d_install/bin;$d_repo/git/cmd;$base_path"
-cd $PSScriptRoot
-ruby.exe -v
-Write-Host "----------------------------------------- Running spec_win32ole.rb"
-ruby.exe spec_win32ole.rb
+Test-All
+sleep 5
+MSpec
 
 ren "$d_install/lib/ruby/site_ruby/readline.rb_" "readline.rb"
 
