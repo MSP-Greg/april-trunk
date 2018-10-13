@@ -6,12 +6,12 @@ module SpecWin32Ole
 class << self
 
   def run
-    puts "\nCreating 'InternetExplorer.Application'"
+    puts "\nCreating 'MSXML.DOMDocument'"
     retries = 3
     retried = 0
     begin
-      ie = WIN32OLE.new 'InternetExplorer.Application'
-      puts "\nie created", ""
+      ie = WIN32OLE.new 'MSXML.DOMDocument'
+      puts "\nMSXML.DOMDocument created", ""
     rescue => e
       puts "--------------- ERROR #{e.class}"
       puts e.message
@@ -26,7 +26,7 @@ class << self
       begin
         ie.ole_func_methods(1)
       rescue => e
-        puts "ie.ole_func_methods - #{e.class} - #{e.message}"
+        puts "Correctly raised - ie.ole_func_methods - #{e.class} - #{e.message}"
       end
       puts
 
@@ -46,4 +46,5 @@ class << self
 
 end
 end
+SpecWin32Ole.run
 SpecWin32Ole.run
