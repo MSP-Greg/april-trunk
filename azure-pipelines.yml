@@ -30,6 +30,13 @@ jobs:
         displayName: $(System.JobName) install info
         
       - powershell: ./2_0_test.ps1
-        failOnStderr: true
-        continueOnError: false
+        failOnStderr: false
+        continueOnError: true
         displayName: $(System.JobName) test
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish logs
+        continueOnError: true
+        inputs:
+          pathtoPublish: $(Build.SourcesDirectory)/logs
+          artifactName: mingw-logs
