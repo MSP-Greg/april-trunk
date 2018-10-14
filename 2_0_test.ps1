@@ -226,7 +226,7 @@ $m_start = Get-Date
 sleep 2
 BootStrapTest
 sleep 2
-Test-All
+# no -ext- files compiled Test-All
 sleep 5
 MSpec
 
