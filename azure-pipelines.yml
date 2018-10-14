@@ -17,7 +17,6 @@ jobs:
 
       - powershell: |
           git config --global core.autocrlf false
-          git config --global core.eol lf
           git clone -q --depth=5 --no-tags --branch=trunk  https://github.com/ruby/ruby.git                  ./ruby
         displayName: $(System.JobName) add ruby repo
 
